@@ -3,12 +3,27 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+    <!--объявление компонентов приложения, бин - компонент, в нашем случае класс,
+    инициализируется в контейнере IoC Spaing
+    загугли: https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html
+    в этом контейнере инициализируется бины, внедряются зависимости, другими словами, идет инъекции коллабораторами-->
     <bean id="numbersBean" class="Numbers"/>
     <bean id="aspectBean" class="Aspect">
+        <!--объявляем коллабораторы класса, их два, это компоненты системы,
+        которые учавствуют в структурных связях в конфигурируемом компоненте
+        в нашем случае их два, есть два способа их инъектирования
+        1) через конструктор, тогда вместо <property name="..." value=""/>
+            будет <constructor-arg value="...">
+        2) либо как в нашем случае через методы setters компонента-->
         <property name="informDivision" value="Производится деление чисел"/>
         <property name="warnUser" value="Не дели на 0, двоечник"/>
     </bean>
 
+    <!--Вся конфигурация написана на xml, так как позволяет не влизать в код бизнес логики,
+        освобождает нас от написания собственных ассемблеров, все на себя берет Ява
+    -->
+
+    <!--здесь объявляем работу аспекта, точку процесса в которой он работает, перехватывает-->
     <aop:aspectj-autoproxy/>
     <aop:config proxy-target-class="true">
         <aop:aspect ref="aspectBean">
